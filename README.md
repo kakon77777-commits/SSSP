@@ -1,0 +1,181 @@
+# SSSP — Structured Scholarly Source Protocol
+
+SSSP 是一個 **AI-native scholarly authoring protocol** 的研究型 MVP。它把聊天／渲染畫面與正式學術來源分離，讓 AI 透過 typed nodes、revision、checksum、validation 與 transaction-like mutation 直接寫入 canonical source，而不是讓人從渲染後 DOM 複製 Markdown／LaTeX 再進行事後修復。
+
+核心原則：
+
+> **Chat is discussion. File is source. Render is a view. Mutation is transactional. Validation happens before commit.**
+
+## 為什麼做 SSSP
+
+既有論文 corpus 已實際觀察到多種 rendered-source divergence：
+
+- Canvas／網頁渲染後 DOM 被複製，而不是原始 LaTeX；
+- `$` 同時作為貨幣字元與 math delimiter；
+- 漏 delimiter 造成後續正文級聯失效；
+- `\\` 等合法 TeX 被 repair regex 誤傷；
+- `\\b`、`\\t`、`\\n` 等序列經錯誤 escape decoding 轉成控制字元；
+- renderer 0 error，但公式語義已靜默損毀。
+
+因此 SSSP 採 source-first：
+
+```text
+Discussion → Canonical Source → Validation → Rendered Views
+```
+
+而不是：
+
+```text
+Rendered View → Copy → Guess Source → Repair
+```
+
+完整案例目錄：[`docs/research/數學公式常見損毀模式_問題目錄.md`](docs/research/數學公式常見損毀模式_問題目錄.md)。
+
+## v0.1 架構
+
+SSSP 刻意拆成三層：
+
+1. **Canonical Format** — typed scholarly nodes 與 ledgers。
+2. **Mutation Protocol** — create / append / replace / validate / export / snapshot。
+3. **MCP Adapter** — 目前第一個可執行介面；未來可另接 CLI、REST 或其他 agent protocol。
+
+正式數學 source 存在 node field 中，不把 Markdown delimiter 當 canonical data：
+
+```json
+{
+  "id": "eq-0001",
+  "type": "math_block",
+  "latex": "\\forall x\\in X,\\;P(x)"
+}
+```
+
+Markdown 是 exporter 產生的 derived view。
+
+## MCP tools
+
+目前提供 7 個 tools：
+
+```text
+sssp.create_document
+sssp.append_node
+sssp.replace_node
+sssp.read_node
+sssp.validate_document
+sssp.export_document
+sssp.commit_version
+```
+
+server 目前實作 MCP `2025-11-25` stdio／JSON-RPC 2.0 lifecycle subset。
+
+## 快速開始
+
+需求：
+
+- Python 3.10+
+- Node.js 18+（MathJax L2 renderer validation）
+
+安裝 renderer dependency：
+
+```bash
+npm install
+```
+
+啟動 MCP stdio server：
+
+```bash
+python3 src/mcp_server.py
+```
+
+server 僅把 MCP JSON-RPC 寫到 stdout；log 應走 stderr。
+
+預設 canonical data root：
+
+```text
+./data
+```
+
+可覆寫：
+
+```bash
+export SSSP_ROOT=/absolute/path/to/sssp-data
+python3 src/mcp_server.py
+```
+
+MCP host registration 範例見 [`docs/MCP_STDIO_EXAMPLE.md`](docs/MCP_STDIO_EXAMPLE.md)。
+
+## 測試
+
+```bash
+python3 tests/test_core.py
+python3 tests/test_damage_regressions.py
+python3 tests/test_mcp_smoke.py
+```
+
+GitHub Actions 會安裝 `mathjax-full@3.2.1` 後執行三組測試。
+
+## Validation layers
+
+### L1 — Structural / character validation
+
+目前包含：
+
+- forbidden control bytes；
+- PUA；
+- zero-width characters；
+- node checksum；
+- duplicate IDs；
+- math brace / environment 基礎檢查；
+- canonical math 中的 Markdown `$` delimiter warning；
+- `newline + eg/eq/abla` 類 silent escape corruption risk。
+
+### L2 — TeX renderer validation
+
+`scripts/mathjax_validate.js` 使用 MathJax TeX parser 解析 `math_block`。
+
+### L3 — Semantic validation（規劃中）
+
+v0.1 尚未宣稱能證明數學語義正確。未來目標包括 semantic diff、claim consistency 與 symbol/definition drift detection。
+
+## Canonical data model
+
+每篇文件包含：
+
+- document metadata；
+- ordered typed nodes；
+- revision；
+- SHA-256 node checksums；
+- Semantic Ledger；
+- Claim Ledger；
+- audit log；
+- immutable version snapshots；
+- derived exports。
+
+Schema：[`docs/sssp_document.schema.json`](docs/sssp_document.schema.json)。
+
+## 文件
+
+- [SSSP v0.1 技術白皮書](docs/SSSP_技術白皮書_v0.1.md)
+- [AI Authoring Prompt](docs/SSSP_AUTHORING_PROMPT.md)
+- [MCP stdio 接法](docs/MCP_STDIO_EXAMPLE.md)
+- [數學公式常見損毀模式問題目錄](docs/research/數學公式常見損毀模式_問題目錄.md)
+- [測試結果](TEST_RESULTS.md)
+
+## 專案狀態
+
+**v0.1 research MVP**。目前不是 production remote server，尚未提供：
+
+- remote Streamable HTTP；
+- authentication / authorization；
+- multi-writer lock service；
+- 完整 JSON Schema runtime enforcement；
+- L3 semantic verifier；
+- structured math AST；
+- package / installer。
+
+下一階段應優先使用真實論文做端到端 authoring trial，量測：
+
+1. 新公式損毀率；
+2. 本地 AI 後處理時間；
+3. source/render divergence；
+4. 多 agent revision conflict；
+5. semantic drift false positive / false negative。
