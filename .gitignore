@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.so
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+node_modules/
+npm-debug.log*
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+
+# Runtime scholarly data: keep the checked-in demo only.
+data/*
+!data/demo-paper/
+!data/demo-paper/**

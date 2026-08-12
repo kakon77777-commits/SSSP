@@ -1,0 +1,41 @@
+{
+  "protocol": "SSSP",
+  "version": "0.1",
+  "document_id": "demo-paper",
+  "title": "SSSP Demo：Source First 學術文件",
+  "revision": 3,
+  "created_at": "2026-08-12T13:24:43.174696Z",
+  "updated_at": "2026-08-12T13:24:43.186120Z",
+  "nodes": [
+    {
+      "id": "h1",
+      "type": "heading",
+      "level": 2,
+      "content": "核心命題",
+      "created_at": "2026-08-12T13:24:43.182139Z",
+      "updated_at": "2026-08-12T13:24:43.182139Z",
+      "provenance": {"actor": "demo", "reason": "append node"},
+      "checksum": "sha256:49364bb459075c6db0f1de4871f28be57a2f749d78188ff1694aba17af08a631"
+    },
+    {
+      "id": "p1",
+      "type": "paragraph",
+      "content": "渲染結果只是衍生 view；canonical source 由 typed nodes 保存。",
+      "created_at": "2026-08-12T13:24:43.184709Z",
+      "updated_at": "2026-08-12T13:24:43.184709Z",
+      "provenance": {"actor": "demo", "reason": "append node"},
+      "checksum": "sha256:6d9f36ff2ef009f1094023a8691ab6ae82f53ff9563e439563f94d7e63708dd5"
+    },
+    {
+      "id": "eq1",
+      "type": "math_block",
+      "latex": "\\boxed{\\text{Canonical Source}\\rightarrow\\text{Validation}\\rightarrow\\text{Rendered View}}",
+      "created_at": "2026-08-12T13:24:43.186070Z",
+      "updated_at": "2026-08-12T13:24:43.186070Z",
+      "provenance": {"actor": "demo", "reason": "append node"},
+      "checksum": "sha256:f930f5ef13704252fd9de7714a1f3e42fafc79d8a6a76949b6cdc8c02332df35"
+    }
+  ],
+  "semantic_ledger": {"terms": {}, "deprecated_terms": {}, "symbols": {}},
+  "claim_ledger": {}
+}

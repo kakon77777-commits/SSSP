@@ -1,0 +1,10 @@
+{
+  "name": "sssp-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Structured Scholarly Source Protocol MCP MVP",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "mathjax-full": "3.2.1"
+  }
+}
