@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: sssp-mcp
+    runtime: docker
+    plan: free
+    autoDeploy: false
+    healthCheckPath: /healthz
+    envVars:
+      - key: SSSP_ENDPOINT_TOKEN
+        sync: false
+      - key: SSSP_ALLOWED_ORIGINS
+        value: https://chatgpt.com,https://www.chatgpt.com,https://chat.openai.com
+      - key: SSSP_ROOT
+        value: /tmp/sssp-data
