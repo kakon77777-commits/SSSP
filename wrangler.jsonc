@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "sssp-evemisslab",
+  "main": "site/worker.js",
+  "compatibility_date": "2026-08-12",
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "sssp.evemisslab.com",
+      "custom_domain": true
+    }
+  ],
+  "assets": {
+    "directory": "./dist-site",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": true
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}

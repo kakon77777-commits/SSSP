@@ -9,6 +9,10 @@ __pycache__/
 venv/
 env/
 node_modules/
+dist-site/
+.wrangler/
+worker-configuration.d.ts
+*.cpuprofile
 npm-debug.log*
 .DS_Store
 Thumbs.db

@@ -6,6 +6,24 @@ SSSP 是一個 **AI-native scholarly authoring protocol** 的研究型 MVP。它
 
 > **Chat is discussion. File is source. Render is a view. Mutation is transactional. Validation happens before commit.**
 
+## 公開研究網站
+
+SSSP 的雙語公開說明站位於：
+
+```text
+https://sssp.evemisslab.com/
+```
+
+網站負責解釋協定、工具、驗證層與目前邊界；它不會公開一個未經身分驗證的寫入端點。機器可讀的站點狀態位於 `/.well-known/sssp.json`。
+
+本機建置與檢查：
+
+```bash
+npm run site:check
+```
+
+Cloudflare 部署設定以 `wrangler.jsonc` 為準。
+
 ## 為什麼做 SSSP
 
 既有論文 corpus 已實際觀察到多種 rendered-source divergence：

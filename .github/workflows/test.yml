@@ -18,7 +18,11 @@ jobs:
         with:
           node-version: '20'
       - name: Install renderer dependency
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
+      - name: Build and validate public site
+        run: npm run site:check
+      - name: Validate Cloudflare deployment bundle
+        run: npx wrangler deploy --dry-run
       - name: Core tests
         run: python3 tests/test_core.py
       - name: Damage regression tests
