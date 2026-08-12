@@ -65,7 +65,7 @@ sssp.export_document
 sssp.commit_version
 ```
 
-server 目前實作 MCP `2025-11-25` stdio／JSON-RPC 2.0 lifecycle subset。
+server v0.2 同時提供 stdio 與 Streamable HTTP；stdio 仍以 MCP `2025-11-25` JSON-RPC lifecycle 運作。
 
 ## 快速開始
 
@@ -109,9 +109,10 @@ MCP host registration 範例見 [`docs/MCP_STDIO_EXAMPLE.md`](docs/MCP_STDIO_EXA
 python3 tests/test_core.py
 python3 tests/test_damage_regressions.py
 python3 tests/test_mcp_smoke.py
+python3 tests/test_remote_http.py
 ```
 
-GitHub Actions 會安裝 `mathjax-full@3.2.1` 後執行三組測試。
+GitHub Actions 會安裝 `mathjax-full@3.2.1` 後執行四組測試。
 
 ## Validation layers
 
@@ -157,15 +158,15 @@ Schema：[`docs/sssp_document.schema.json`](docs/sssp_document.schema.json)。
 - [SSSP v0.1 技術白皮書](docs/SSSP_技術白皮書_v0.1.md)
 - [AI Authoring Prompt](docs/SSSP_AUTHORING_PROMPT.md)
 - [MCP stdio 接法](docs/MCP_STDIO_EXAMPLE.md)
+- [Remote MCP v0.2 部署](docs/REMOTE_MCP_DEPLOY.md)
 - [數學公式常見損毀模式問題目錄](docs/research/數學公式常見損毀模式_問題目錄.md)
 - [測試結果](TEST_RESULTS.md)
 
 ## 專案狀態
 
-**v0.1 research MVP**。目前不是 production remote server，尚未提供：
+**v0.2 research MVP**。目前已提供 stdio + basic Streamable HTTP remote transport，但尚未提供 production-grade：
 
-- remote Streamable HTTP；
-- authentication / authorization；
+- OAuth/OIDC authentication / authorization；
 - multi-writer lock service；
 - 完整 JSON Schema runtime enforcement；
 - L3 semantic verifier；
@@ -179,3 +180,24 @@ Schema：[`docs/sssp_document.schema.json`](docs/sssp_document.schema.json)。
 3. source/render divergence；
 4. 多 agent revision conflict；
 5. semantic drift false positive / false negative。
+
+## Remote MCP v0.2
+
+v0.2 在保留 stdio 的同時新增 MCP Streamable HTTP transport：
+
+```bash
+SSSP_ENDPOINT_TOKEN='YOUR_LONG_URL_SAFE_SECRET' \
+python3 src/remote_server.py
+```
+
+健康檢查：`GET /healthz`。ChatGPT 連線 endpoint：
+
+```text
+https://YOUR-HOST/mcp/YOUR_LONG_URL_SAFE_SECRET
+```
+
+遠端 server 會驗證 `Origin`（若 request 帶有此 header）、限制 request body 大小，並接受 MCP `2025-11-25`、`2025-06-18`、`2025-03-26` protocol header。v0.2 採 stateless JSON response 模式，`GET` MCP endpoint 會回 `405`，不啟用 server-initiated SSE。
+
+部署與 ChatGPT 填表詳見 [`docs/REMOTE_MCP_DEPLOY.md`](docs/REMOTE_MCP_DEPLOY.md)。repo 亦附 `Dockerfile` 與 `render.yaml` 供一次性遠端測試。
+
+> 注意：URL token 是開發期 capability URL，不是 production OAuth。正式多人部署應改用 OAuth/OIDC、可信 reverse proxy 或 Secure MCP Tunnel；canonical source 也應使用 persistent storage。
