@@ -1,11 +1,90 @@
 from __future__ import annotations
 
 TOOLS = [
-    {"name":"sssp.create_document","title":"Create SSSP Document","description":"Create a new canonical SSSP scholarly document.","inputSchema":{"type":"object","properties":{"document_id":{"type":"string"},"title":{"type":"string"},"actor":{"type":"string"}},"required":["document_id","title"],"additionalProperties":False}},
-    {"name":"sssp.append_node","title":"Append SSSP Node","description":"Append one typed canonical node and validate before atomic commit.","inputSchema":{"type":"object","properties":{"document_id":{"type":"string"},"node":{"type":"object"},"expected_revision":{"type":"integer"},"actor":{"type":"string"},"reason":{"type":"string"}},"required":["document_id","node"],"additionalProperties":False}},
-    {"name":"sssp.replace_node","title":"Replace SSSP Node","description":"Replace one canonical node with revision/checksum conflict protection.","inputSchema":{"type":"object","properties":{"document_id":{"type":"string"},"node_id":{"type":"string"},"replacement":{"type":"object"},"expected_revision":{"type":"integer"},"expected_checksum":{"type":"string"},"actor":{"type":"string"},"reason":{"type":"string"}},"required":["document_id","node_id","replacement"],"additionalProperties":False}},
-    {"name":"sssp.read_node","title":"Read SSSP Node","description":"Read one canonical node without using a rendered export.","inputSchema":{"type":"object","properties":{"document_id":{"type":"string"},"node_id":{"type":"string"}},"required":["document_id","node_id"],"additionalProperties":False}},
-    {"name":"sssp.validate_document","title":"Validate SSSP Document","description":"Run structural/character and MathJax render validation against canonical source.","inputSchema":{"type":"object","properties":{"document_id":{"type":"string"}},"required":["document_id"],"additionalProperties":False}},
-    {"name":"sssp.export_document","title":"Export SSSP Document","description":"Compile canonical SSSP source into a derived Markdown view.","inputSchema":{"type":"object","properties":{"document_id":{"type":"string"},"format":{"type":"string","enum":["markdown"]}},"required":["document_id"],"additionalProperties":False}},
-    {"name":"sssp.commit_version","title":"Commit SSSP Version","description":"Create an immutable validated snapshot of the canonical document.","inputSchema":{"type":"object","properties":{"document_id":{"type":"string"},"label":{"type":"string"}},"required":["document_id"],"additionalProperties":False}}
+    {
+        "name": "sssp.create_document",
+        "title": "Create SSSP Document",
+        "description": "Create a new canonical SSSP scholarly document.",
+        "annotations": {"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": False},
+        "inputSchema": {
+            "type": "object",
+            "properties": {"document_id": {"type": "string"}, "title": {"type": "string"}, "actor": {"type": "string"}},
+            "required": ["document_id", "title"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "sssp.append_node",
+        "title": "Append SSSP Node",
+        "description": "Append one typed canonical node and validate before atomic commit.",
+        "annotations": {"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": False},
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "document_id": {"type": "string"}, "node": {"type": "object"},
+                "expected_revision": {"type": "integer"}, "actor": {"type": "string"}, "reason": {"type": "string"}
+            },
+            "required": ["document_id", "node"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "sssp.replace_node",
+        "title": "Replace SSSP Node",
+        "description": "Replace one canonical node with revision/checksum conflict protection.",
+        "annotations": {"readOnlyHint": False, "destructiveHint": True, "idempotentHint": False, "openWorldHint": False},
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "document_id": {"type": "string"}, "node_id": {"type": "string"}, "replacement": {"type": "object"},
+                "expected_revision": {"type": "integer"}, "expected_checksum": {"type": "string"},
+                "actor": {"type": "string"}, "reason": {"type": "string"}
+            },
+            "required": ["document_id", "node_id", "replacement"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "sssp.read_node",
+        "title": "Read SSSP Node",
+        "description": "Read one canonical node without using a rendered export.",
+        "annotations": {"readOnlyHint": True, "destructiveHint": False, "idempotentHint": True, "openWorldHint": False},
+        "inputSchema": {
+            "type": "object",
+            "properties": {"document_id": {"type": "string"}, "node_id": {"type": "string"}},
+            "required": ["document_id", "node_id"], "additionalProperties": False,
+        },
+    },
+    {
+        "name": "sssp.validate_document",
+        "title": "Validate SSSP Document",
+        "description": "Run structural/character and MathJax render validation against canonical source.",
+        "annotations": {"readOnlyHint": True, "destructiveHint": False, "idempotentHint": True, "openWorldHint": False},
+        "inputSchema": {
+            "type": "object", "properties": {"document_id": {"type": "string"}},
+            "required": ["document_id"], "additionalProperties": False,
+        },
+    },
+    {
+        "name": "sssp.export_document",
+        "title": "Export SSSP Document",
+        "description": "Compile canonical SSSP source into a derived Markdown view.",
+        "annotations": {"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": False},
+        "inputSchema": {
+            "type": "object",
+            "properties": {"document_id": {"type": "string"}, "format": {"type": "string", "enum": ["markdown"]}},
+            "required": ["document_id"], "additionalProperties": False,
+        },
+    },
+    {
+        "name": "sssp.commit_version",
+        "title": "Commit SSSP Version",
+        "description": "Create an immutable validated snapshot of the canonical document.",
+        "annotations": {"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": False},
+        "inputSchema": {
+            "type": "object",
+            "properties": {"document_id": {"type": "string"}, "label": {"type": "string"}},
+            "required": ["document_id"], "additionalProperties": False,
+        },
+    },
 ]
