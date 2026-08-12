@@ -10,7 +10,7 @@ from typing import Any, Dict
 from sssp_core import SSSPError, SSSPStore
 
 MCP_VERSION = "2025-11-25"
-SERVER_INFO = {"name": "sssp-mcp", "title": "SSSP Scholarly Source Server", "version": "0.1.0"}
+SERVER_INFO = {"name": "sssp-mcp", "title": "SSSP Scholarly Source Server", "version": "0.2.0"}
 ROOT = Path(os.environ.get("SSSP_ROOT", Path(__file__).resolve().parent.parent / "data"))
 STORE = SSSPStore(ROOT)
 
@@ -58,7 +58,15 @@ def handle(msg: Dict[str, Any]) -> None:
     if method == "initialize":
         requested = msg.get("params", {}).get("protocolVersion", MCP_VERSION)
         version = MCP_VERSION if requested != MCP_VERSION else requested
-        send({"jsonrpc": "2.0", "id": req_id, "result": {"protocolVersion": version, "capabilities": {"tools": {"listChanged": False}}, "serverInfo": SERVER_INFO, "instructions": "Use SSSP tools for canonical scholarly source. Rendered chat/Markdown is not the source of truth."}})
+        send({
+            "jsonrpc": "2.0", "id": req_id,
+            "result": {
+                "protocolVersion": version,
+                "capabilities": {"tools": {"listChanged": False}},
+                "serverInfo": SERVER_INFO,
+                "instructions": "Use SSSP tools for canonical scholarly source. Rendered chat/Markdown is not the source of truth."
+            }
+        })
         return
     if method == "notifications/initialized":
         return
