@@ -29,7 +29,7 @@ PAGES = {
             ("#tools", "Tools"),
             ("#status", "Status"),
         ],
-        "eyebrow": "EVEMISSLAB / RESEARCH MVP · v0.2",
+        "eyebrow": "EVEMISSLAB / RESEARCH MVP · v0.3",
         "title": "The source survives the conversation.",
         "standfirst": (
             "SSSP is an AI-native protocol for scholarly writing. It gives agents typed nodes, "
@@ -83,7 +83,7 @@ PAGES = {
         "pillars": [
             ("Canonical format", "Typed scholarly nodes plus semantic and claim ledgers."),
             ("Mutation protocol", "Create, append and replace operations guarded by revisions and checksums."),
-            ("MCP adapter", "A seven-tool interface over stdio or basic Streamable HTTP."),
+            ("MCP adapter", "Seven tools over stdio or public Streamable HTTP."),
         ],
         "tools_kicker": "03 / EXECUTABLE SURFACE",
         "tools_title": "Seven tools, one authority boundary.",
@@ -115,8 +115,8 @@ PAGES = {
         "status_kicker": "04 / STATUS & BOUNDARIES",
         "status_title": "A research MVP that says where it stops.",
         "status_intro": (
-            "SSSP v0.2 is executable and tested. It is not yet a production multi-writer scholarly service. "
-            "The public site explains the protocol; it does not expose an unauthenticated write endpoint."
+            "SSSP v0.3 is executable and tested. Its public MCP endpoint is intentionally unauthenticated and shared, "
+            "so it is suitable only for non-sensitive research experiments—not private or production scholarship."
         ),
         "available_title": "Available now",
         "available": [
@@ -124,7 +124,8 @@ PAGES = {
             "Revision and checksum conflict protection",
             "L1 structural and L2 MathJax validation",
             "Immutable snapshots and Markdown export",
-            "MCP over stdio and basic Streamable HTTP",
+            "Public MCP over Streamable HTTP",
+            "Persistent canonical storage in Durable Object SQLite",
         ],
         "not_yet_title": "Not claimed yet",
         "not_yet": [
@@ -132,15 +133,15 @@ PAGES = {
             "A multi-writer lock service",
             "Full runtime JSON Schema enforcement",
             "An L3 theorem or meaning checker",
-            "Production persistent scholarly storage",
+            "Private tenant isolation and authenticated ownership",
         ],
-        "start_title": "Run the reference implementation",
-        "start_intro": "Clone the repository, install the pinned MathJax dependency, then start the local MCP server.",
+        "start_title": "Connect the public MCP",
+        "start_intro": "Use the same HTTPS endpoint in ChatGPT or Claude. Select no authentication and never submit sensitive material.",
         "copy": "Copy",
         "copied": "Copied",
         "docs": "Read the deployment notes",
         "footer_line": "Chat is discussion. File is source. Render is a view.",
-        "footer_meta": "SSSP v0.2 · Research MVP · 2026",
+        "footer_meta": "SSSP v0.3 · Research MVP · 2026",
     },
     "zh": {
         "lang": "zh-Hant",
@@ -156,7 +157,7 @@ PAGES = {
             ("#tools", "工具"),
             ("#status", "狀態"),
         ],
-        "eyebrow": "EVEMISSLAB / 研究型 MVP · v0.2",
+        "eyebrow": "EVEMISSLAB / 研究型 MVP · v0.3",
         "title": "對話會結束，來源仍然活著。",
         "standfirst": (
             "SSSP 是一套 AI 原生的學術寫作協定。它讓代理直接操作具型別節點、版本、校驗和與驗證，"
@@ -209,7 +210,7 @@ PAGES = {
         "pillars": [
             ("Canonical format", "具型別的學術節點，加上 semantic 與 claim ledgers。"),
             ("Mutation protocol", "Create、append、replace 都受 revision 與 checksum 保護。"),
-            ("MCP adapter", "七個工具，可透過 stdio 或 basic Streamable HTTP 使用。"),
+            ("MCP adapter", "七個工具，可透過 stdio 或公開 Streamable HTTP 使用。"),
         ],
         "tools_kicker": "03 / 可執行介面",
         "tools_title": "七個工具，一條權威邊界。",
@@ -241,8 +242,8 @@ PAGES = {
         "status_kicker": "04 / 狀態與邊界",
         "status_title": "一個會說自己停在哪裡的研究型 MVP。",
         "status_intro": (
-            "SSSP v0.2 已可執行並通過測試，但還不是 production multi-writer 學術服務。"
-            "公開網站負責說明協定，不會裸露一個未驗證身分的寫入端點。"
+            "SSSP v0.3 已可執行並通過測試；公開 MCP 端點刻意採無驗證、共享模式。"
+            "它只適合非敏感研究實驗，不適合私人資料或 production 學術工作。"
         ),
         "available_title": "目前可用",
         "available": [
@@ -250,7 +251,8 @@ PAGES = {
             "Revision 與 checksum 衝突保護",
             "L1 結構驗證與 L2 MathJax 驗證",
             "不可變 snapshot 與 Markdown export",
-            "MCP stdio 與 basic Streamable HTTP",
+            "公開 Streamable HTTP MCP",
+            "Durable Object SQLite 持久化 canonical storage",
         ],
         "not_yet_title": "尚未宣稱",
         "not_yet": [
@@ -258,15 +260,15 @@ PAGES = {
             "Multi-writer lock service",
             "完整 runtime JSON Schema enforcement",
             "L3 theorem 或 meaning checker",
-            "Production persistent scholarly storage",
+            "私有租戶隔離與通過驗證的資料所有權",
         ],
-        "start_title": "執行參考實作",
-        "start_intro": "Clone repository、安裝鎖定版本的 MathJax，接著啟動本機 MCP server。",
+        "start_title": "連接公開 MCP",
+        "start_intro": "ChatGPT 與 Claude 使用同一個 HTTPS 端點；選擇無驗證，且不要提交任何敏感資料。",
         "copy": "複製",
         "copied": "已複製",
         "docs": "閱讀部署說明",
         "footer_line": "Chat 是討論。File 是來源。Render 是視圖。",
-        "footer_meta": "SSSP v0.2 · 研究型 MVP · 2026",
+        "footer_meta": "SSSP v0.3 · 研究型 MVP · 2026",
     },
 }
 
@@ -382,7 +384,7 @@ def render_page(key: str) -> str:
         "name": "SSSP — Structured Scholarly Source Protocol",
         "codeRepository": REPOSITORY,
         "url": ORIGIN,
-        "version": "0.2.0",
+        "version": "0.3.0",
         "programmingLanguage": ["Python", "JavaScript"],
         "description": page["standfirst"],
         "author": {"@type": "Organization", "name": "EveMissLab"},
@@ -516,11 +518,12 @@ def render_page(key: str) -> str:
         <div class="quickstart">
           <div><p class="kicker">REFERENCE IMPLEMENTATION</p><h2>{esc(page['start_title'])}</h2><p>{esc(page['start_intro'])}</p><a href="{REPOSITORY}/blob/main/docs/REMOTE_MCP_DEPLOY.md">{esc(page['docs'])} <span aria-hidden="true">↗</span></a></div>
           <div class="terminal">
-            <div class="terminal-bar"><span>powershell</span><button type="button" data-copy-command data-copy-label="{esc(page['copy'])}" data-copied-label="{esc(page['copied'])}">{esc(page['copy'])}</button></div>
-            <pre><code>git clone {REPOSITORY}.git
-cd SSSP
-npm install
-python src/mcp_server.py</code></pre>
+            <div class="terminal-bar"><span>MCP CONNECTOR</span><button type="button" data-copy-command data-copy-label="{esc(page['copy'])}" data-copied-label="{esc(page['copied'])}">{esc(page['copy'])}</button></div>
+            <pre><code>Name: SSSP
+Description: Canonical scholarly source tools
+Server URL: https://sssp.evemisslab.com/mcp
+Authentication: None
+OAuth Client ID / Secret: leave blank</code></pre>
           </div>
         </div>
       </div>

@@ -88,7 +88,7 @@ def validate_page(path: Path, expected_lang: str) -> str:
     assert len(parser.json_ld) == 1, f"{path}: expected one JSON-LD block"
     structured = json.loads(parser.json_ld[0])
     assert structured["@type"] == "SoftwareSourceCode"
-    assert structured["version"] == "0.2.0"
+    assert structured["version"] == "0.3.0"
 
     for reference in parser.references:
         parsed = urlsplit(reference)
@@ -133,6 +133,8 @@ def main() -> int:
     for tool in EXPECTED_TOOLS:
         assert tool in english and tool in chinese, f"missing tool copy: {tool}"
         assert english.count(tool) == 1 and chinese.count(tool) == 1, f"duplicate tool copy: {tool}"
+    endpoint = "https://sssp.evemisslab.com/mcp"
+    assert endpoint in english and endpoint in chinese, "missing public MCP endpoint"
 
     validate_png(DIST / "og.png")
     config = json.loads((ROOT / "wrangler.jsonc").read_text(encoding="utf-8"))

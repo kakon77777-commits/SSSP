@@ -19,8 +19,8 @@ jobs:
           node-version: '24'
       - name: Install renderer dependency
         run: npm ci --no-audit --no-fund
-      - name: Build and validate public site
-        run: npm run site:check
+      - name: Typecheck, Workers runtime tests, and public site validation
+        run: npm run check
       - name: Validate Cloudflare deployment bundle
         run: npx wrangler deploy --dry-run
       - name: Core tests

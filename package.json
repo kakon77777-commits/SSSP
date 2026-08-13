@@ -1,19 +1,32 @@
 {
   "name": "sssp-mcp",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "private": true,
   "description": "Structured Scholarly Source Protocol MCP MVP",
   "license": "UNLICENSED",
   "scripts": {
+    "cf:types": "wrangler types",
+    "pretypecheck": "npm run cf:types",
+    "typecheck": "tsc --noEmit",
+    "pretest": "npm run site:build",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm test && npm run site:check",
     "site:build": "python site/build_site.py",
     "site:check": "npm run site:build && python site/validate_site.py",
     "site:dev": "npm run site:build && wrangler dev",
     "site:deploy": "npm run site:build && wrangler deploy"
   },
   "dependencies": {
-    "mathjax-full": "3.2.1"
+    "@modelcontextprotocol/server": "2.0.0",
+    "agents": "0.20.1",
+    "mathjax-full": "3.2.1",
+    "zod": "4.4.3"
   },
   "devDependencies": {
-    "wrangler": "^4.122.0"
+    "@cloudflare/vitest-pool-workers": "0.21.2",
+    "@types/node": "26.2.0",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10",
+    "wrangler": "4.122.0"
   }
 }

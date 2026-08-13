@@ -1,70 +1,50 @@
-# SSSP MCP MVP v0.2 — Test Results
+# SSSP MCP v0.3 — Test Results
 
-Run date: 2026-08-12
+Run date: 2026-08-13
 
-## Core test
-
-PASS
-
-Verified:
-- create document
-- append paragraph
-- append math node
-- MathJax parse validation
-- replace node with expected checksum
-- stale revision rejection
-- Markdown export
-- immutable snapshot
-
-## MCP stdio smoke test
+## Cloudflare Worker verification
 
 PASS
 
-Verified lifecycle:
-- `initialize` with protocol `2025-11-25`
-- `notifications/initialized`
-- `tools/list`
-- 7 exposed SSSP tools
-- `tools/call` create/append/validate/export/commit
+Verified in the Cloudflare Workers runtime:
 
-## MCP Streamable HTTP smoke test
+- `GET /healthz` and `GET /.well-known/sssp.json` advertise the public unauthenticated endpoint;
+- MCP `initialize` with protocol `2025-11-25`;
+- `tools/list` exposes exactly the seven SSSP tools;
+- create, append, validate, read, replace, export, and commit tool calls;
+- revision and checksum-protected replacement;
+- immutable/idempotent snapshot creation;
+- canonical state survives Durable Object eviction and a new MCP request;
+- untrusted browser Origin rejection (`403`);
+- actual request-body size enforcement even with a misleading `Content-Length` (`413`).
 
-PASS
+Vitest result: 2 files passed, 6 tests passed.
 
-Verified:
-- `POST /mcp/<token>` initialize
-- HTTP `202` for `notifications/initialized`
-- `tools/list`
-- remote `tools/call`
-- MCP protocol-version validation
-- `Origin` allowlist rejection (`403`)
-- `GET /mcp/<token>` returns `405` when server-initiated SSE is disabled
-- secret endpoint path protection
-
-## Damage regression fixtures
+## Type, site, dependency, and bundle checks
 
 PASS
 
-Current fixtures cover:
-- decoded backspace/control-byte corruption (`\\b...` family)
-- PUA markers
-- zero-width markers
-- unbalanced LaTeX braces
-- `$` delimiter appearing inside canonical math node
-- silent newline + `eg/eq/abla/...` escape-corruption risk signature
+- `wrangler types` generated the configured bindings;
+- strict TypeScript checking passed;
+- both localized public pages, seven tool names, metadata, local assets, PNG, and deployment config validated;
+- production dependency audit reported 0 vulnerabilities;
+- Wrangler deployment dry-run bundled the Worker and recognized the Durable Object, rate-limit, and asset bindings;
+- local startup profiling completed successfully (3.63 MiB bundle, 836.95 KiB gzip, 214.2 ms active CPU on this machine).
 
-## Docker / deployment validation
+## Python reference implementation regressions
 
 PASS
 
-GitHub Actions successfully builds the repository `Dockerfile` after all four test suites pass. The repo also contains a Render Blueprint (`render.yaml`) with `/healthz` health checks and an externally supplied `SSSP_ENDPOINT_TOKEN`.
+- canonical core workflow;
+- damage regression fixtures;
+- MCP stdio lifecycle and seven tools;
+- token-scoped local Streamable HTTP lifecycle, protocol validation, Origin rejection, and disabled server-initiated SSE.
 
-## Known MVP limitations
+## Known research-MVP boundaries
 
-- L3 semantic validation is heuristic, not a theorem/meaning checker.
-- MathJax validation invokes a subprocess per math node; batch validation should replace this in a later version.
-- No full multi-node transaction yet.
-- No MCP resources/prompts yet; tools only.
-- Remote v0.2 is stateless at the MCP transport layer and does not expose server-initiated SSE.
-- URL-path token is for single-user development testing, not production OAuth/OIDC.
-- Filesystem-backed canonical data requires persistent storage for production use.
+- The public endpoint is intentionally unauthenticated and shared. It is not suitable for secrets, personal data, private drafts, credentials, or confidential research.
+- Anyone who knows a `document_id` can attempt to read or mutate its nodes; `actor` is an unverified display label.
+- Rate limits and storage quotas reduce abuse and cost exposure but are not authentication or authorization.
+- L3 semantic validation remains heuristic; SSSP does not claim theorem or meaning verification.
+- There is no multi-node transaction tool, private tenant ownership boundary, or MCP resources/prompts surface yet.
+- The local Python remote server remains a v0.2 reference path with filesystem storage; the public v0.3 Worker uses Durable Object SQLite.
